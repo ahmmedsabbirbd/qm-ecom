@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('size', 100);
 
             // F - K
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id')->unique();
 
             // Relationship
             $table->foreign('product_id')->references('id')->on('products')
