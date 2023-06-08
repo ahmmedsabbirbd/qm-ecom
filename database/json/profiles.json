@@ -1,0 +1,130 @@
+[
+    {
+        "email": "ahmmedsabbirbd@gmail.com",
+        "firstName": "Sabbir",
+        "lastName": "Ahmmed",
+        "mobile": "01712923446",
+        "city": "Natore",
+        "shippingAddress": "Fulbari, Walia, Lalpur, Natore, Bangladesh"
+    },
+    {
+        "email": "rabbil@gmail.com",
+        "firstName": "Rabbil",
+        "lastName": "Hasan",
+        "mobile": "01785388919",
+        "city": "Ranpur",
+        "shippingAddress": "Rnapur, Bangladesh"
+    },
+    {
+        "email": "hasin@gmail.com",
+        "firstName": "Hasin",
+        "lastName": "Hiders",
+        "mobile": "01701931139",
+        "city": "Dhaka",
+        "shippingAddress": "Dhaka, Bangladesh"
+    },
+    {
+        "email": "suman@gmail.com",
+        "firstName": "Suman",
+        "lastName": "Ali",
+        "mobile": "01727282829",
+        "city": "Natore",
+        "shippingAddress": "Walia, Lalpur, Natore, Bangladesh"
+    },
+    {
+        "email": "faisal@gmail.com",
+        "firstName": "Faisal",
+        "lastName": "Ahmmed",
+        "mobile": "01798393077",
+        "city": "Sylet",
+        "shippingAddress": "Sylet, Bangladesh"
+    },
+    {
+        "email": "yosuf@gmail.com",
+        "firstName": "Yousuf",
+        "lastName": "Ahmmed",
+        "mobile": "01609093677",
+        "city": "Kummila",
+        "shippingAddress": "Kummila, Bangladesh"
+    },
+    {
+        "email": "mridul@gmail.com",
+        "firstName": "Mridul",
+        "lastName": "Khan",
+        "mobile": "01631894477",
+        "city": "Irshodi",
+        "shippingAddress": "Irshodi, Bangladesh"
+    },
+    {
+        "email": "al-amin@gmail.com",
+        "firstName": "Al-Amin",
+        "lastName": "Sorkar",
+        "mobile": "01737933939",
+        "city": "Mirpur",
+        "shippingAddress": "Mirpur, Bangladesh"
+    },
+    {
+        "email": "naim@gmail.com",
+        "firstName": "Naim",
+        "lastName": "Ali",
+        "mobile": "01712923447",
+        "city": "Natore",
+        "shippingAddress": "Walia, Lalpur, Natore, Bangladesh"
+    },
+    {
+        "email": "sumit@gmail.com",
+        "firstName": "Sumit",
+        "lastName": "Shaha",
+        "mobile": "01315264760",
+        "city": "Dhaka",
+        "shippingAddress": "Dhaka, Bangladesh"
+    },
+    {
+        "email": "suvo@gmail.com",
+        "firstName": "Suvo",
+        "lastName": "Khan",
+        "mobile": "01315264761",
+        "city": "Natore",
+        "shippingAddress": "Fulbari, Walia, Lalpur, Natore, Bangladesh"
+    },
+    {
+        "email": "sagor@gmail.com",
+        "firstName": "Sagor",
+        "lastName": "Ali",
+        "mobile": "01725485758",
+        "city": "Moimonshing",
+        "shippingAddress": "Moimonshing, Bangladesh"
+    },
+    {
+        "email": "me@gmail.com",
+        "firstName": "Me",
+        "lastName": "Ahmmed",
+        "mobile": "01724857785",
+        "city": "Jossore",
+        "shippingAddress": "Jossore, Bangladesh"
+    },
+    {
+        "email": "info.ahmmedsabbirbd@gmail.com",
+        "firstName": "Sabbir",
+        "lastName": "Sorkar",
+        "mobile": "01712923442",
+        "city": "Paris",
+        "shippingAddress": "Paris, France"
+    },
+    {
+        "email": "me.ahmmedsabbirbd@gmail.com",
+        "firstName": "Sabbir",
+        "lastName": "Khan",
+        "mobile": "01657845785",
+        "city": "Ponjogor",
+        "shippingAddress": "Ponjogor, Bangladesh"
+    },
+    {
+        "email": "me.rabbil@gmail.com",
+        "firstName": "Rabbil",
+        "lastName": "Rupom",
+        "mobile": "01712458987",
+        "city": "Mohammodpur",
+        "shippingAddress": "Mohammodpur, Bangladesh"
+    }
+]
