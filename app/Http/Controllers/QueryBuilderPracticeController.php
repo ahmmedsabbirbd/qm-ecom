@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class QueryBuilderPracticeController extends Controller
 {
@@ -11,7 +13,24 @@ class QueryBuilderPracticeController extends Controller
      */
     public function index()
     {
-        //
+        // return key pair value all record in coulm name 
+        $products = DB::table('categories')->pluck('categoryImage', 'categoryName');
+        
+
+        // return unicq value
+        // $products = DB::table('products')->select('title')->distinct()->get();
+
+        if(!$products) {
+            return Response()->json([
+                'success'=>false,
+                'messeage'=>'Data not found'
+            ]);
+        } else {
+            return Response()->json([
+                'success'=>true,
+                'messeage'=>$products
+            ]);
+        }
     }
 
     /**
