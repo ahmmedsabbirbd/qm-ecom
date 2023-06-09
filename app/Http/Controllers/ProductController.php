@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,30 +23,22 @@ class ProductController extends Controller
         $brand = $request->brand;
         
         // show total products
-        if($category) {
-            $categoryId = DB::table('categories')->where('categoryName', '=', $category)->select('id')->first();
-
-            if($categoryId) {   
-                $allProduct = DB::table('products')
-                ->where('category_id', '=', $categoryId->id)
-                ->join('brands', 'products.brand_id', '=', 'brands.id')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
-                ->orderBy('id', 'asc')
-                ->get();
-            }
-        } else if($brand) {
-            $brandId = DB::table('brands')->where('brandName', '=', $brand)->select('id')->first();
-
-            if($brandId) {   
-                $allProduct = DB::table('products')
-                ->where('brand_id', '=', $brandId->id)
-                ->join('brands', 'products.brand_id', '=', 'brands.id')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
-                ->orderBy('id', 'asc')
-                ->get();
-            }
+        if($category) {   
+            $allProduct = DB::table('categories')
+            ->where('categories.categoryName', '=', $category)
+            ->join('products', 'categories.id', '=', 'products.category_id')
+            ->join('brands', 'products.brand_id', '=', 'brands.id')
+            ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+            ->orderBy('id', 'asc')
+            ->get();
+        } else if($brand) { 
+            $allProduct = DB::table('brands')
+            ->where('brands.brandName', '=', $brand)
+            ->join('products', 'brands.id', '=', 'products.brand_id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+            ->orderBy('id', 'asc')
+            ->get(); 
         } else {
             $allProduct = DB::table('products')
             ->join('brands', 'products.brand_id', '=', 'brands.id')
@@ -53,10 +48,10 @@ class ProductController extends Controller
             ->get();
         }
 
-        if(!$allProduct) {
+        if(!$allProduct || $allProduct->count() == 0) {
             return Response()->json([
                 'success'=>false,
-                'message'=>'data no found'
+                'message'=>'Data no found'
             ]);
         }
         
@@ -80,8 +75,34 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
+        DB::table('products')
+        ->insert([
+            'title'=> $request->input('title'),
+            'short_des'=> $request->input('short_des'),
+            'price'=> $request->input('price'),
+            'discount'=> $request->input('discount'),
+            'discount_price'=> $request->input('discount_price'),
+            'image'=> $request->input('image'),
+            'stock'=> $request->input('stock'),
+            'star'=> $request->input('star'),
+            'remark'=> $request->input('remark'),
+            'category_id'=> $request->input('category_id'),
+            'brand_id'=> $request->input('brand_id')
+        ]);
+
+        if(!$request->validated()) {
+            return Response()->json([
+                'success'=>false,
+                'message'=>'Data not found!'
+            ]);
+        } else {
+            return Response()->json([
+                'success'=>true,
+                'message'=>'Product added!'
+            ]);
+        }
         
     }
 
@@ -98,10 +119,8 @@ class ProductController extends Controller
         ->where('products.id', '=', $id)
         ->join('brands', 'products.brand_id', '=', 'brands.id')
         ->join('categories', 'products.category_id', '=', 'categories.id')
-        ->join('product_details', 'products.id', '=', 'product_details.product_id')
         ->select('products.id', 'products.title', 'products.short_des', 'products.price',
             'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark',
-            'product_details.color', 'product_details.size', 'product_details.des',  'product_details.img1', 'product_details.img2', 'product_details.img3', 'product_details.img4',
             'brands.brandName', 'brands.brandImage',
             'categories.categoryName','categories.categoryImage',
             'products.created_at', 'products.updated_at')
@@ -114,7 +133,6 @@ class ProductController extends Controller
         ->select('product_details.color', 'product_details.size', 'product_details.des',  'product_details.img1', 'product_details.img2', 'product_details.img3', 'product_details.img4')
         ->first();
 
-        
         if(!$product) {
             return Response()->json([
                 'success'=>false,
@@ -142,9 +160,28 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
-        //
+        DB::table('products')
+        ->where('id', '=', $id)
+        ->update($request->input());
+
+        // if(!$request->validated()) {
+        //     return Response()->json([
+        //         'success'=>false,
+        //         'message'=>'Data not found!'
+        //     ]);
+        // } else {
+        //     return Response()->json([
+        //         'success'=>true,
+        //         'message'=>'Product updated!'
+        //     ]);
+        // }
+
+        return Response()->json([
+            'success'=>true,
+            'message'=>'Product updated!'
+        ]);
     }
 
     /**
@@ -152,6 +189,18 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = DB::table('products')->where('id', '=', $id)->delete();
+
+        if(!$product) {
+            return Response()->json([
+                'success'=>false,
+                'message'=>'Data not found!'
+            ]);
+        }
+        
+        return Response()->json([
+            'success'=>true,
+            'message'=>'Product deleted!'
+        ]);
     }
 }
