@@ -16,9 +16,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {  
-        $allProduct = 'product not found';
         $category = $request->category;
         $brand = $request->brand;
+        
         // show total products
         if($category) {
             $categoryId = DB::table('categories')->where('categoryName', '=', $category)->select('id')->first();
@@ -53,14 +53,19 @@ class ProductController extends Controller
             ->get();
         }
 
-        $totalProduct = 0;
-        if($allProduct && $allProduct != 'product not found') {
-            $totalProduct = $allProduct->count();
+        if(!$allProduct) {
+            return Response()->json([
+                'success'=>false,
+                'message'=>'data no found'
+            ]);
         }
-
+        
+        $totalProduct = $allProduct->count();
         return Response()->json([
-            'total-products'=> $totalProduct,
-            'products'=> $allProduct
+            'success'=>true,
+            'message'=>'Product found',
+            'total-products-count'=> $totalProduct,
+            'total-products'=> $allProduct,
         ]);
     }
 
@@ -100,14 +105,22 @@ class ProductController extends Controller
             'brands.brandName', 'brands.brandImage',
             'categories.categoryName','categories.categoryImage',
             'products.created_at', 'products.updated_at')
-        ->get();
+        ->first();
 
         // product find with id in where method
         $product_details = DB::table('products')
         ->where('products.id', '=', $id)
         ->join('product_details', 'products.id', '=', 'product_details.product_id')
         ->select('product_details.color', 'product_details.size', 'product_details.des',  'product_details.img1', 'product_details.img2', 'product_details.img3', 'product_details.img4')
-        ->get();
+        ->first();
+
+        
+        if(!$product) {
+            return Response()->json([
+                'success'=>false,
+                'message'=>'data no found'
+            ]);
+        }
 
         return Response()->json([
             'status'=> 'success',
