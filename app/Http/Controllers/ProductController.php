@@ -92,7 +92,6 @@ class ProductController extends Controller
                         ->orderBy('products.price', 'asc')
                         ->get();
                     }
-                    
                 } else {
                     $allProduct = DB::table('products')
                     ->join('brands', function(JoinClause $join) use ($price) {
