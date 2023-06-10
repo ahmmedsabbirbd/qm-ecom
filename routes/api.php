@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvanceWhereClausesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QueryBuilderPracticeController;
 use Illuminate\Http\Request;
@@ -22,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('/products', ProductController::class);
 Route::apiResource('/querybuilder', QueryBuilderPracticeController::class);
+Route::apiResource('/advance-where-clauses', AdvanceWhereClausesController::class);
