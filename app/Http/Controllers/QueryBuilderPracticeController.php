@@ -14,7 +14,7 @@ class QueryBuilderPracticeController extends Controller
     public function index()
     {
         // return key pair value all record in coulm name 
-        $products = DB::table('categories')->pluck('categoryImage', 'categoryName');
+        // $products = DB::table('categories')->pluck('categoryImage', 'categoryName');
         
 
         // return unicq value

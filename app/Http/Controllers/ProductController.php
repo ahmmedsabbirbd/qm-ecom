@@ -21,6 +21,7 @@ class ProductController extends Controller
     {  
         $category = $request->category;
         $brand = $request->brand;
+        $price = $request->price;
         
         // show total products
         if($category) {   
@@ -31,14 +32,30 @@ class ProductController extends Controller
             ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
             ->orderBy('id', 'asc')
             ->get();
-        } else if($brand) { 
-            $allProduct = DB::table('brands')
-            ->where('brands.brandName', '=', $brand)
-            ->join('products', 'brands.id', '=', 'products.brand_id')
-            ->join('categories', 'products.category_id', '=', 'categories.id')
+        } else if($price) {
+            if($price == 'max') {
+                $allProduct = DB::table('products')
+                ->join('brands', 'products.brand_id', '=', 'brands.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+                ->orderBy('products.price', 'desc')
+                ->get();
+            } else { 
+                $allProduct = DB::table('products')
+                ->join('brands', 'products.brand_id', '=', 'brands.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+                ->orderBy('products.price', 'asc')
+                ->get();
+            }
+        } else if($price) {
+            $allProduct = DB::table('categories')
+            ->where('categories.categoryName', '=', $category)
+            ->join('products', 'categories.id', '=', 'products.category_id')
+            ->join('brands', 'products.brand_id', '=', 'brands.id')
             ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
             ->orderBy('id', 'asc')
-            ->get(); 
+            ->get();
         } else {
             $allProduct = DB::table('products')
             ->join('brands', 'products.brand_id', '=', 'brands.id')
