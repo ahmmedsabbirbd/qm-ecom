@@ -49,12 +49,17 @@ class QueryBuilderPracticeController extends Controller
         // ->get();
         
         // return right join 
-        $products = DB::table('products')
-        ->crossJoin('brands')
-        ->crossJoin('categories')
-        ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
-        ->orderBy('products.id', 'asc')
-        ->get();
+        // $products = DB::table('products')
+        // ->crossJoin('brands')
+        // ->crossJoin('categories')
+        // ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+        // ->orderBy('products.id', 'asc')
+        // ->get();
+
+        // didnot understand properly
+        // return union
+        $price = DB::table('products')->select('price'); 
+        $products = DB::table('products')->select('title')->union($price)->get();
 
         $totalProducts = $products->count();
 

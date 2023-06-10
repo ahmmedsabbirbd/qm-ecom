@@ -33,7 +33,20 @@ class ProductController extends Controller
             ->orderBy('id', 'asc')
             ->get();
         } else if($price) {
-            $price = explode(',', $request->input('price'));
+            // equal to =
+            // not equal to !=
+            // less than <
+            // less than or equal to  <=
+            //  greather than  >
+            // greather than or equal to  >=
+            // LIKE (contains)  %a%, %a, a%
+            // NOT LIKE (does not contains)  %a%, %a, a%
+            // IN (is in list)  [a, b]
+            // NOT IN (is not in list)  [a, b]
+
+            $priceText = $request->input('price');
+            $priceText = str_replace("'", '', $priceText);
+            $price = explode(',', $priceText);
 
             if('max' == $price[0]) {
                 $allProduct = DB::table('products')
@@ -49,15 +62,47 @@ class ProductController extends Controller
                 ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
                 ->orderBy('products.price', 'asc')
                 ->get();
-            } else {
-                $allProduct = DB::table('products')
-                ->join('brands', function(JoinClause $join) use ($price) {
-                    $join->on('products.brand_id', '=', 'brands.id')->where('products.price', $price[1], $price[0]);
-                })
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
-                ->orderBy('products.price', 'asc')
-                ->get();
+            } else { 
+                if(count($price) == 3) {
+                    if('left' == $price[2]) {
+                        $allProduct = DB::table('products')
+                        ->join('brands', function(JoinClause $join) use ($price) {
+                            $join->on('products.brand_id', '=', 'brands.id')->where('products.price', $price[1], "%$price[0]");
+                        })
+                        ->join('categories', 'products.category_id', '=', 'categories.id')
+                        ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+                        ->orderBy('products.price', 'asc')
+                        ->get();
+                    } else if ('right' == $price[2]) {
+                        $allProduct = DB::table('products')
+                        ->join('brands', function(JoinClause $join) use ($price) {
+                            $join->on('products.brand_id', '=', 'brands.id')->where('products.price', $price[1], "$price[0]%");
+                        })
+                        ->join('categories', 'products.category_id', '=', 'categories.id')
+                        ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+                        ->orderBy('products.price', 'asc')
+                        ->get();
+                    } else if('all' == $price[2]) {
+                        $allProduct = DB::table('products')
+                        ->join('brands', function(JoinClause $join) use ($price) {
+                            $join->on('products.brand_id', '=', 'brands.id')->where('products.price', $price[1], "%$price[0]%");
+                        })
+                        ->join('categories', 'products.category_id', '=', 'categories.id')
+                        ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+                        ->orderBy('products.price', 'asc')
+                        ->get();
+                    }
+                    
+                } else {
+                    $allProduct = DB::table('products')
+                    ->join('brands', function(JoinClause $join) use ($price) {
+                        $join->on('products.brand_id', '=', 'brands.id')->where('products.price', $price[1], $price[0]);
+                    })
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+                    ->orderBy('products.price', 'asc')
+                    ->get();
+                }
             }
         } else if($price) {
             $allProduct = DB::table('categories')
