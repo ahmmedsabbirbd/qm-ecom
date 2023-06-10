@@ -91,6 +91,8 @@ class ProductController extends Controller
                         ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
                         ->orderBy('products.price', 'asc')
                         ->get();
+                    } else {
+                        $allProduct = null;
                     }
                 } else {
                     $allProduct = DB::table('products')
