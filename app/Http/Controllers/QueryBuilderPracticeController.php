@@ -20,6 +20,44 @@ class QueryBuilderPracticeController extends Controller
         // return unicq value
         // $products = DB::table('products')->select('title')->distinct()->get();
 
+        // return max value
+        // $products = DB::table('products')->max('price');
+
+        // return min value
+        // $products = DB::table('products')->min('price');
+
+        // return avg value
+        // $products = DB::table('products')->avg('price');
+    
+        // return all record sum value
+        // $products = DB::table('products')->sum('price');
+    
+        // return left join 
+        // $products = DB::table('products')
+        // ->leftJoin('brands', 'products.brand_id', 'brands.id')
+        // ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+        // ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+        // ->orderBy('products.id', 'asc')
+        // ->get();
+        
+        // return right join 
+        // $products = DB::table('products')
+        // ->rightJoin('brands', 'products.brand_id', 'brands.id')
+        // ->rightJoin('categories', 'products.category_id', '=', 'categories.id')
+        // ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+        // ->orderBy('products.id', 'asc')
+        // ->get();
+        
+        // return right join 
+        $products = DB::table('products')
+        ->crossJoin('brands')
+        ->crossJoin('categories')
+        ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+        ->orderBy('products.id', 'asc')
+        ->get();
+
+        $totalProducts = $products->count();
+
         if(!$products) {
             return Response()->json([
                 'success'=>false,
@@ -28,6 +66,7 @@ class QueryBuilderPracticeController extends Controller
         } else {
             return Response()->json([
                 'success'=>true,
+                'total-products'=> $totalProducts,
                 'messeage'=>$products
             ]);
         }

@@ -33,16 +33,27 @@ class ProductController extends Controller
             ->orderBy('id', 'asc')
             ->get();
         } else if($price) {
-            if($price == 'max') {
+            $price = explode(',', $request->input('price'));
+
+            if('max' == $price[0]) {
                 $allProduct = DB::table('products')
                 ->join('brands', 'products.brand_id', '=', 'brands.id')
                 ->join('categories', 'products.category_id', '=', 'categories.id')
                 ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
                 ->orderBy('products.price', 'desc')
                 ->get();
-            } else { 
+            } else if('min' == $price[0]) { 
                 $allProduct = DB::table('products')
                 ->join('brands', 'products.brand_id', '=', 'brands.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
+                ->orderBy('products.price', 'asc')
+                ->get();
+            } else {
+                $allProduct = DB::table('products')
+                ->join('brands', function(JoinClause $join) use ($price) {
+                    $join->on('products.brand_id', '=', 'brands.id')->where('products.price', $price[1], $price[0]);
+                })
                 ->join('categories', 'products.category_id', '=', 'categories.id')
                 ->select('products.id', 'products.title', 'products.short_des', 'products.price', 'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark', 'brands.brandName', 'brands.brandImage', 'categories.categoryName','categories.categoryImage', 'products.created_at', 'products.updated_at')
                 ->orderBy('products.price', 'asc')
