@@ -57,11 +57,32 @@ class QueryBuilderPracticeController extends Controller
         // ->get();
 
         // didnot understand properly
-        // return union
-        $price = DB::table('products')->select('price'); 
-        $products = DB::table('products')->select('title')->union($price)->get();
+        // // return union
+        // $price = DB::table('products')->select('price'); 
+        // $products = DB::table('products')->select('title')->union($price)->get();
 
-        $totalProducts = $products->count();
+        //  decrement
+        // $products = DB::table('products')
+        // ->where('id', 10)
+        // ->decrement('price', '30916');
+        
+        //  decrement
+        // $products = DB::table('products')
+        // ->where('id', 10)
+        // ->increment('price', '10');
+
+        //  truncate // delete all record and staring id 1
+        // $products = DB::table('product_wishes')
+        // ->truncate();
+
+        //  decrement
+        $products = DB::table('brands')
+        ->updateOrInsert(
+            ['brandName'=>'Apple'],
+            ['brandName'=>'Apple'],
+        );
+
+        // $totalProducts = $products->count();
 
         if(!$products) {
             return Response()->json([
@@ -71,7 +92,7 @@ class QueryBuilderPracticeController extends Controller
         } else {
             return Response()->json([
                 'success'=>true,
-                'total-products'=> $totalProducts,
+                // 'total-products'=> $totalProducts,
                 'messeage'=>$products
             ]);
         }

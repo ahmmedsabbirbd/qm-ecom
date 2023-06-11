@@ -13,7 +13,8 @@ class BrandController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {   
+        
         $brands = DB::table('brands')
         ->orderBy('brandName', 'asc')
         ->get();
@@ -45,11 +46,20 @@ class BrandController extends Controller
     public function store(StoreBrandRequest $request)
     {
         if($request->validated()) {
+            // only insert
             $brand = DB::table('brands')
             ->insert([
                 'brandName'=>$request->input('brandName'),
                 'brandImage'=>$request->input('brandImage')
             ]);
+
+            // $brand = DB::table('brands')
+            // ->updateOrInsert([
+            //     'brandName'=>$request->input('brandName'),
+            //     'brandImage'=>$request->input('brandImage')
+            // ], [
+            //     'brandName'=>$request->input('brandName'),
+            // ]);
 
             if(!$brand) {
                 return Response()->json([
