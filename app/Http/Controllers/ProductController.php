@@ -257,6 +257,38 @@ class ProductController extends Controller
             'message'=>'Product updated!'
         ]);
     }
+    /*
+    * product details
+    */
+   public function productDetails(string $id)
+   {
+        $productDetails = DB::table('products')
+        ->where('products.id', '=', $id)
+        ->join('brands', 'products.brand_id', '=', 'brands.id')
+        ->join('categories', 'products.category_id', '=', 'categories.id')
+        ->join('product_details', 'products.id', '=', 'product_details.product_id')
+        ->select(
+            'products.id', 'products.title', 'products.short_des', 'products.price',
+            'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark',
+            'brands.brandName', 'brands.brandImage',
+            'categories.categoryName','categories.categoryImage',
+            'product_details.color', 'product_details.size', 'product_details.des',  'product_details.img1', 'product_details.img2', 'product_details.img3', 'product_details.img4',
+            'products.created_at', 'products.updated_at',
+            )
+        ->first();
+
+       if(!$productDetails) {
+            return Response()->json([
+                'success'=>false,
+                'message'=>'Data not found!'
+            ]);
+        }
+    
+       return Response()->json([
+           'success'=>true,
+           'message'=>$productDetails
+       ]);
+   }
 
     /**
      * Remove the specified resource from storage.

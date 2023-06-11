@@ -23,6 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/products', ProductController::class);
+Route::controller(ProductController::class)->group(function () {
+    Route::get('/products/{id}/details', 'productDetails');
+});
+
 Route::apiResource('/querybuilder', QueryBuilderPracticeController::class);
 Route::apiResource('/advance-where-clauses', AdvanceWhereClausesController::class);
 Route::apiResource('/brands', BrandController::class);
