@@ -24,18 +24,20 @@ class StoreBrandRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'brandName'=> 'required|max:50',
-            'brandImage'=> 'required|max:100'
+            'brandName'=> 'required|string|max:50',
+            'brandImage'=> 'required|string|max:100'
         ];
     }
     
     public function messages(): array
     {
         return [
-            'brandName.required' => 'The brand name is required.',
-            'brandName.max' => 'The brand name cannot exceed 50 characters.',
-            'brandImage.required' => 'The brand image is required.',
-            'brandImage.max' => 'The brand image cannot exceed 100 characters.',
+            'brandName.required' => 'The brand name field is required.',
+            'brandName.string' => 'The brand name field must be a string.',
+            'brandName.max' => 'The brand name field cannot exceed 50 characters.',
+            'brandImage.required' => 'The brand image field is required.',
+            'brandImage.string' => 'The brand image field must be a string.',
+            'brandImage.max' => 'The brand image field cannot exceed 100 characters.',
         ];
     }
 
