@@ -48,10 +48,8 @@ class BrandController extends Controller
             $brand = DB::table('brands')
             ->insert([
                 'brandName'=>$request->input('brandName'),
-                'brandImg'=>$request->input('brandImg')
+                'brandImage'=>$request->input('brandImage')
             ]);
-
-            dd($brand);
 
             if(!$brand) {
                 return Response()->json([
@@ -62,6 +60,8 @@ class BrandController extends Controller
                 return Response()->json([
                     'success'=>true,
                     'message'=>$brand
+                ], 201, [
+                    'token'=> 'dsf23212'
                 ]);
             }
         }
@@ -110,6 +110,20 @@ class BrandController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $brands = DB::table('brands')
+        ->where('id', $id)
+        ->delete();
+
+        if(!$brands) {
+            return Response()->json([
+                'success'=>false,
+                'message'=>'Data not found'
+            ]);
+        } else {
+            return Response()->json([
+                'success'=>true,
+                'message'=>$brands
+            ]);
+        }
     }
 }

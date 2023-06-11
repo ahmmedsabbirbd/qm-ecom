@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreBrandRequest extends FormRequest
 {
@@ -23,7 +25,26 @@ class StoreBrandRequest extends FormRequest
     {
         return [
             'brandName'=> 'required|max:50',
-            'brandImg'=> 'required|max:100'
+            'brandImage'=> 'required|max:100'
         ];
+    }
+    
+    public function messages(): array
+    {
+        return [
+            'brandName.required' => 'The brand name is required.',
+            'brandName.max' => 'The brand name cannot exceed 50 characters.',
+            'brandImage.required' => 'The brand image is required.',
+            'brandImage.max' => 'The brand image cannot exceed 100 characters.',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => 'The given data is invalid.',
+            'errors' => $validator->errors(),
+        ], 422));
     }
 }
