@@ -93,8 +93,50 @@ class AdvanceWhereClausesController extends Controller
         // ->get();
         
         //  whereColumn
+        // $products = DB::table('products')
+        // ->whereColumn('created_at', '<', 'updated_at')
+        // ->get();
+
+
+        //  orderBy
+        // $products = DB::table('products')
+        // ->orderBy('title', 'asc')
+        // ->get();
+        
+        //  inRandomOrder
+        // $products = DB::table('products')
+        // ->inRandomOrder()
+        // ->get();
+
+
+        //  latest work for created_at
+        // $products = DB::table('products')
+        // ->latest()
+        // ->get();
+        
+        // oldest work for created_at
+        // $products = DB::table('products')
+        // ->oldest()
+        // ->get();
+
+        // groupBy
+        // 'strict' => false, // default true, i use groupby for i do false
+        // $products = DB::table('products')
+        // ->groupBy('title')
+        // ->get();
+
+        // groupBy with having
+        // 'strict' => false, // default true, i use groupby for i do false
+        // $products = DB::table('products')
+        // ->groupBy('title')
+        // ->having('price', '=', '60916')
+        // ->get();
+
+
+        // skip and take
         $products = DB::table('products')
-        ->whereColumn('created_at', '<', 'updated_at')
+        ->skip(1)
+        ->take(15)
         ->get();
         
         if(!$products || $products->count() == 0) {
