@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductDetailRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -257,30 +258,44 @@ class ProductController extends Controller
             'message'=>'Product updated!'
         ]);
     }
+    
     /*
     * product details
     */
    public function productDetails(string $id)
    {
-        $productDetails = DB::table('products')
+        $products = DB::table('products')
         ->where('products.id', '=', $id)
-        ->join('brands', 'products.brand_id', '=', 'brands.id')
-        ->join('categories', 'products.category_id', '=', 'categories.id')
-        ->join('product_details', 'products.id', '=', 'product_details.product_id')
-        ->select(
-            'products.id', 'products.title', 'products.short_des', 'products.price',
-            'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark',
-            'brands.brandName', 'brands.brandImage',
-            'categories.categoryName','categories.categoryImage',
-            'product_details.color', 'product_details.size', 'product_details.des',  'product_details.img1', 'product_details.img2', 'product_details.img3', 'product_details.img4',
-            'products.created_at', 'products.updated_at',
-            )
         ->first();
 
-       if(!$productDetails) {
+        if($products) {
+            $productDetails = DB::table('products')
+            ->where('products.id', '=', $id)
+            ->join('brands', 'products.brand_id', '=', 'brands.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->join('product_details', 'products.id', '=', 'product_details.product_id')
+            ->select(
+                'products.id', 'products.title', 'products.short_des', 'products.price',
+                'products.discount',  'products.discount_price',  'products.image',  'products.stock',  'products.star',  'products.remark',
+                'brands.brandName', 'brands.brandImage',
+                'categories.categoryName','categories.categoryImage',
+                'product_details.color', 'product_details.size', 'product_details.des',  'product_details.img1', 'product_details.img2', 'product_details.img3', 'product_details.img4',
+                'products.created_at', 'products.updated_at',
+            )
+            ->first();   
+        }
+
+        if(!$products) {
             return Response()->json([
                 'success'=>false,
-                'message'=>'Data not found!'
+                'message'=>'Product din not found!'
+            ]);
+        }
+        
+        if(!$productDetails) {
+           return Response()->json([
+                'success'=>false,
+                'message'=>'Product details din not found!'
             ]);
         }
     
@@ -288,6 +303,39 @@ class ProductController extends Controller
            'success'=>true,
            'message'=>$productDetails
        ]);
+   }
+    
+   /*
+    * product details add
+    */
+   public function productDetailsAdd(StoreProductDetailRequest $request)
+   {
+        if($request->validated()) {
+            $productDetails = DB::table('product_details')
+            ->insert([
+                'img1'=> $request->input('img1'),
+                'img2'=> $request->input('img2'),
+                'img3'=> $request->input('img3'),
+                'img4'=> $request->input('img4'),
+                'des'=> $request->input('des'),
+                'color'=> $request->input('color'),
+                'size'=> $request->input('size'),
+                'product_id'=> $request->input('product_id'),
+            ]);
+
+            if(!$productDetails) {   
+                return Response()->json([
+                    'success'=>false,
+                    'message'=>'Data not found!'
+                ]);
+            } else {
+                return Response()->json([
+                    'success'=>true,
+                    'message'=>'Product Details added!'
+                ]);
+            }
+        }
+        
    }
 
     /**

@@ -87,8 +87,9 @@ class StoreProductRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(Response()->json([
-            'message'=> 'The given data is invalid.',
-            'error'=> $validator->errors(),
+            'success' => false,
+            'message' => 'The given data is invalid.',
+            'errors' => $validator->errors(),
         ], 422));
     }
 }

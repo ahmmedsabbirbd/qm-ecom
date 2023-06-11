@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('/products', ProductController::class);
 Route::controller(ProductController::class)->group(function () {
     Route::get('/products/{id}/details', 'productDetails');
+    Route::post('/products/{id}/details', 'productDetailsAdd');
 });
 
 Route::apiResource('/querybuilder', QueryBuilderPracticeController::class);
